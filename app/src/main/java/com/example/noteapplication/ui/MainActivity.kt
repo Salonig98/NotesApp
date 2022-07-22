@@ -4,32 +4,30 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noteapplication.R
 import com.example.noteapplication.adapter.NoteRVAdapter
+import com.example.noteapplication.databinding.ActivityMainBinding
 import com.example.noteapplication.model.Note
 import com.example.noteapplication.viewModel.NoteViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
     NoteRVAdapter.NoteClickDeleteInterface {
-    lateinit var notesRV : RecyclerView
-    lateinit var addFAB : FloatingActionButton
+    lateinit var binding: ActivityMainBinding
     lateinit var noteViewModel: NoteViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        notesRV = findViewById(R.id.idRVNotes)
-        addFAB = findViewById(R.id.idFABAddNote)
-
-        notesRV.layoutManager = LinearLayoutManager(this)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.idRvNotes.layoutManager = LinearLayoutManager(this)
 
         val noteRVAdapter = NoteRVAdapter(this, this, this)
-        notesRV.adapter = noteRVAdapter
+        binding.idRvNotes.adapter = noteRVAdapter
         noteViewModel = ViewModelProvider(
             this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(application)
@@ -37,11 +35,10 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
 
         noteViewModel.allNotes.observe(this, Observer { list ->
             list?.let {
-                // on below line we are updating our list.
                 noteRVAdapter.updateList(it)
             }
         })
-        addFAB.setOnClickListener {
+        binding.idFabAddNote.setOnClickListener {
             val intent = Intent(this@MainActivity, AddEditNoteActivity::class.java)
             startActivity(intent)
             this.finish()
@@ -58,7 +55,7 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
         this.finish()
     }
 
-       override fun onDeleteIconClick(note: Note) {
+    override fun onDeleteIconClick(note: Note) {
         noteViewModel.deleteNote(note)
         Toast.makeText(this, "${note.noteTitle} Deleted", Toast.LENGTH_LONG).show()
     }

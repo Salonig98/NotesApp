@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.appcompat.view.menu.MenuView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noteapplication.R
+import com.example.noteapplication.databinding.ActivityMainBinding
+import com.example.noteapplication.databinding.NoteRvItemBinding
 import com.example.noteapplication.model.Note
 
 class NoteRVAdapter(
