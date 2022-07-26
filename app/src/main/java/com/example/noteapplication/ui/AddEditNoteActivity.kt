@@ -2,25 +2,20 @@ package com.example.noteapplication.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.noteapplication.R
 import com.example.noteapplication.databinding.ActivityAddEditNoteBinding
-import com.example.noteapplication.databinding.ActivityMainBinding
 import com.example.noteapplication.model.Note
 import com.example.noteapplication.viewModel.NoteViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 class AddEditNoteActivity : AppCompatActivity() {
-    lateinit var binding: ActivityAddEditNoteBinding
     lateinit var viewModal: NoteViewModel
+    lateinit var binding: ActivityAddEditNoteBinding
     var noteID = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,11 +33,11 @@ class AddEditNoteActivity : AppCompatActivity() {
             val noteTitle = intent.getStringExtra("noteTitle")
             val noteDescription = intent.getStringExtra("noteDescription")
             noteID = intent.getIntExtra("noteId", -1)
-            binding.idBtn.setText("Update Note")
+            binding.idBtn.text = "Update Note"
             binding.idEditNoteName.setText(noteTitle)
             binding.idEditNoteDescription.setText(noteDescription)
         } else {
-            binding.idBtn.setText("Save Note")
+            binding.idBtn.text = "Save Note"
         }
 
         binding.idBtn.setOnClickListener {

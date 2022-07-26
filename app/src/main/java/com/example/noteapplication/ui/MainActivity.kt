@@ -1,33 +1,39 @@
 package com.example.noteapplication.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.noteapplication.R
 import com.example.noteapplication.adapter.NoteRVAdapter
-import com.example.noteapplication.databinding.ActivityMainBinding
 import com.example.noteapplication.model.Note
 import com.example.noteapplication.viewModel.NoteViewModel
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+
 
 class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
-    NoteRVAdapter.NoteClickDeleteInterface {
-    lateinit var binding: ActivityMainBinding
+    NoteRVAdapter.NoteClickDeleteInterface, NoteRVAdapter.NoteClickShareInterface {
+    private lateinit var binding: com.example.noteapplication.databinding.ActivityMainBinding
     lateinit var noteViewModel: NoteViewModel
+    private lateinit var searchView: SearchView
+    private lateinit var noteAdapter: NoteRVAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding =
+            DataBindingUtil.setContentView(this, com.example.noteapplication.R.layout.activity_main)
         binding.idRvNotes.layoutManager = LinearLayoutManager(this)
 
-        val noteRVAdapter = NoteRVAdapter(this, this, this)
-        binding.idRvNotes.adapter = noteRVAdapter
+        noteAdapter = NoteRVAdapter(this, this, this,this)
+        binding.idRvNotes.adapter = noteAdapter
         noteViewModel = ViewModelProvider(
             this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(application)
@@ -35,7 +41,7 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
 
         noteViewModel.allNotes.observe(this, Observer { list ->
             list?.let {
-                noteRVAdapter.updateList(it)
+                noteAdapter.updateList(it)
             }
         })
         binding.idFabAddNote.setOnClickListener {
@@ -43,6 +49,40 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
             startActivity(intent)
             this.finish()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_main, menu)
+        val search = menu?.findItem(R.id.searchItems)
+        searchView = search?.actionView as SearchView
+        searchView.isSubmitButtonEnabled = true
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null)
+                    getItemsFromDB(query)
+
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null)
+                    getItemsFromDB(newText)
+                return true
+            }
+
+        })
+        return true
+    }
+
+    private fun getItemsFromDB(data: String) {
+        var searchText = data
+        searchText = "%$data%"
+        noteViewModel.search(searchText)?.observe(this, Observer {
+            Log.d("main", "$it")
+            noteAdapter.setData(it as ArrayList<Note>)
+
+        })
     }
 
     override fun onNoteClick(note: Note) {
@@ -59,4 +99,28 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
         noteViewModel.deleteNote(note)
         Toast.makeText(this, "${note.noteTitle} Deleted", Toast.LENGTH_LONG).show()
     }
+
+    override fun onShareIconClick(note: Note) {
+        var emailSend = "gnextsaloni100@gmail.com"
+        var emailSubject: String = note.noteTitle
+        var emailBody = note.noteDescription
+
+        val intent: Intent = Intent(Intent.ACTION_SEND)
+
+        intent.putExtra(Intent.EXTRA_EMAIL, emailSend)
+        intent.putExtra(Intent.EXTRA_SUBJECT, emailSubject)
+        intent.putExtra(Intent.EXTRA_TEXT, emailBody)
+
+        intent.type = "message/rfc822"
+
+        startActivity(
+            Intent
+                .createChooser(
+                    intent,
+                    "Choose an Email client :"
+                )
+        )
+    }
+
 }
+

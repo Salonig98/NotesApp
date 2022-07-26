@@ -8,24 +8,30 @@
         android:background="@color/black_shade_1"
         tools:context=".ui.MainActivity">
 
+        <androidx.appcompat.widget.Toolbar
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:minHeight="?attr/actionBarSize"
+            />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/id_rv_notes"
-            tools:listitem="@layout/note_rv_item"
-            android:background="@color/black_shade_1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/black_shade_1"
+            tools:listitem="@layout/note_rv_item" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/id_fab_add_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:id="@+id/id_fab_add_note"
             android:layout_margin="20dp"
-            android:src="@drawable/ic_add"
-            android:tint="@color/white"
             android:backgroundTint="@color/black_shade_2"
-            android:layout_alignParentRight="true" />
+            android:src="@drawable/ic_add"
+            android:tint="@color/white" />
 
 
     </RelativeLayout>

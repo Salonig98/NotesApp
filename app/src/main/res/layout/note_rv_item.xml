@@ -21,7 +21,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/IDTVNoteTitle"
+                android:id="@+id/id_tv_note_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
@@ -31,21 +31,33 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/IDTVTimeStamp"
+                android:id="@+id/id_tv_timestamp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
                 android:layout_margin="4dp"
-                android:layout_below="@id/IDTVNoteTitle"
+                android:layout_below="@id/id_tv_note_title"
                 android:text="@{note.timestamp}"
-                android:layout_toLeftOf="@id/IDTVDelete"
+                android:layout_toLeftOf="@id/id_tv_delete"
                 android:textColor="@color/white" />
 
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/IDTVDelete"
+                android:id="@+id/id_tv_share"
+                android:src="@drawable/ic_share"
+                app:tint="@color/white"
+                android:layout_centerVertical="true"
+                android:layout_margin="5dp"
+                android:padding="4dp"
+                android:layout_toLeftOf="@id/id_tv_delete" />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/id_tv_delete"
                 android:src="@drawable/ic_delete"
                 app:tint="@color/white"
                 android:layout_centerVertical="true"
