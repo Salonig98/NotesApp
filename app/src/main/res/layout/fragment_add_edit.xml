@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.AddEditFragment">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black_shade_1"
+            tools:context=".ui.AddEditNoteActivity">
+
+
+            <EditText
+                android:id="@+id/id_edit_note_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="Enter Note Title"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <EditText
+                android:id="@+id/id_edit_note_description"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/id_btn"
+                android:layout_below="@id/id_edit_note_name"
+                android:layout_margin="10dp"
+                android:background="@color/black_shade_1"
+                android:gravity="start|top"
+                android:hint="Enter your Note Details"
+                android:inputType="textMultiLine"
+                android:singleLine="false"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <Button
+                android:id="@+id/id_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="20dp"
+                android:background="@drawable/custom_button_back"
+                android:text="Button"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
+</layout>
