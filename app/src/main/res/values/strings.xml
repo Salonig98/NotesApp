@@ -1,6 +1,22 @@
 <resources>
     <string name="app_name">Note Application</string>
     <string name="search">Search Note</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="save">Save Note</string>
+    <string name="update">Update Note</string>
+    <string name="email">gnextsaloni100@gmail.com</string>
+    <string name="choose_an_email_client">Choose an Email Client : </string>
+    <string name="message_code">message/rfc822</string>
+    <string name="last_updated">Last Updated : </string>
+    <string name="enter_note_title">Enter Note Title</string>
+    <string name="enter_your_note_details">Enter your Note Details</string>
+    <string name="note_type">noteType</string>
+    <string name="edit">Edit</string>
+    <string name="add_edit_fragment">AddEditFragment</string>
+    <string name="date_format">dd MMM, yyyy - HH:mm</string>
+    <string name="note_object">noteObject</string>
+    <string name="note_updated">Note Updated</string>
+    <string name="added">Added</string>
+    <string name="deleted">Deleted</string>
+
 </resources>

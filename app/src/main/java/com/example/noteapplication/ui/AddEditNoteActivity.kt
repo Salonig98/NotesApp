@@ -14,9 +14,8 @@ class AddEditNoteActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.root_layout, AddEditFragment.newInstance(), "AddEditFragment")
+                .add(R.id.root_layout, AddEditFragment.newInstance(), getString(R.string.add_edit_fragment))
                 .commit()
         }
     }
-
 }

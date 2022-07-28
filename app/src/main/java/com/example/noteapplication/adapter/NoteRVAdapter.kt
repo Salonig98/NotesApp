@@ -9,15 +9,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noteapplication.R
 import com.example.noteapplication.model.Note
+import com.example.noteapplication.ui.MainActivity
 
 class NoteRVAdapter(
     val context: Context,
-    private val noteClickInterface: NoteClickInterface,
+    private val noteClickInterface: MainActivity,
     private val noteClickDeleteInterface: NoteClickDeleteInterface,
     private val noteClickShareInterface: NoteClickShareInterface,
-    ) : RecyclerView.Adapter<NoteRVAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<NoteRVAdapter.ViewHolder>() {
 
     private var allNotes = ArrayList<Note>()
+    val lastUpdated : String = "Last Updated : "
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val noteTV: TextView = itemView.findViewById<TextView>(R.id.id_tv_note_title)
@@ -47,15 +49,16 @@ class NoteRVAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.noteTV.text = allNotes.get(position).noteTitle
-        holder.dateTV.text = "Last Updated : " + allNotes[position].timestamp
+        val note = allNotes.get(position)
+        holder.noteTV.text = note.noteTitle
+        holder.dateTV.text = lastUpdated + note.timestamp
         holder.deleteIV.setOnClickListener {
             noteClickDeleteInterface.onDeleteIconClick(allNotes[position])
         }
         holder.itemView.setOnClickListener {
             noteClickInterface.onNoteClick(allNotes[position])
         }
-        holder.itemView.setOnClickListener {
+        holder.shareIV.setOnClickListener {
             noteClickShareInterface.onShareIconClick(allNotes[position])
         }
     }

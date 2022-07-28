@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class NoteViewModel(application: Application) : AndroidViewModel(application) {
 
     val allNotes: LiveData<List<Note>>
-    val repository: NotesRepository
+    private val repository: NotesRepository
 
     init {
         val dao = NoteDatabase.getDatabase(application).getNotesDao()
@@ -33,27 +33,8 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
         repository.update(note)
     }
 
-    fun search(data:String):LiveData<List<Note>>?
-    {
+    fun search(data: String): LiveData<List<Note>>? {
         return repository.search(data)
     }
-
- // SEARCH FUNCTION , PASS QUERY
-
-
 }
 
-//create a field in viewmodel - which will
-//save the list in the viewmodel property
-//kotlin x dependency for filter
-//how to create a regex
-//all the logic should be in the viewmodel
-//pass the list bac to the UI
-//set the new list in the adapter and notify set data change
-
-//getting the filtered list from the db itself
-//
-
-
-//2nd way to search implement
-//live search - for later implementaion

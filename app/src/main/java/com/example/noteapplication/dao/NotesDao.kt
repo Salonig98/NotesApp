@@ -10,7 +10,7 @@ interface NotesDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(note: Note)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.IGNORE)
     fun update(note: Note)
 
     @Delete
@@ -20,7 +20,7 @@ interface NotesDao {
     fun getAllNotes(): LiveData<List<Note>>
 
     @Query("SELECT * FROM notesTable WHERE title LIKE :data")
-    fun search(data:String):LiveData<List<Note>>
+    fun search(data: String): LiveData<List<Note>>
 
     //search query
 
