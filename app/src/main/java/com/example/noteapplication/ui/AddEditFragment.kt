@@ -15,12 +15,16 @@ import com.example.noteapplication.model.Note
 import com.example.noteapplication.viewModel.NoteViewModel
 import java.text.SimpleDateFormat
 import java.util.*
+import android.widget.RadioButton as RadioButton1
 
 
 class AddEditFragment : Fragment() {
     lateinit var viewModel: NoteViewModel
     lateinit var binding: FragmentAddEditBinding
     var noteID = -1
+    var selectedRadioButton: RadioButton1? = null
+    var selectedRadioButtonId: Int = -1
+    var type: String? = null
 
     companion object {
         fun newInstance(): AddEditFragment {
@@ -55,25 +59,40 @@ class AddEditFragment : Fragment() {
             binding.idBtn.text = getString(R.string.update)
             binding.idEditNoteName.setText(noteTitle)
             binding.idEditNoteDescription.setText(noteDescription)
+            selectedRadioButtonId = binding.radioGroup.checkedRadioButtonId
+            if (selectedRadioButtonId != -1) {
+                selectedRadioButton = binding.radioGroup.findViewById(selectedRadioButtonId)
+                val selectedRbText: String = selectedRadioButton?.text.toString()
+
+            }
         } else {
             binding.idBtn.text = getString(R.string.save)
         }
 
         binding.idBtn.setOnClickListener {
 
+            selectedRadioButtonId = binding.radioGroup.checkedRadioButtonId
+            if (selectedRadioButtonId != -1) {
+                selectedRadioButton = binding.radioGroup.findViewById(selectedRadioButtonId)
+                val selectedRbText: String = selectedRadioButton?.text.toString()
+                type = selectedRbText
+            }
+
             val noteTitle = binding.idEditNoteName.text.toString()
             val noteDescription = binding.idEditNoteDescription.text.toString()
+            val noteType = type
+
 
             if (noteType.equals(getString(R.string.edit))) {
                 if (noteTitle.isNotEmpty() && noteDescription.isNotEmpty()) {
                     val sdf = SimpleDateFormat(getString(R.string.date_format))
                     val currentDateAndTime: String = sdf.format(Date())
-                    val updatedNote = Note(noteTitle, noteDescription, currentDateAndTime)
+                    val updatedNote = Note(noteTitle, noteType, noteDescription, currentDateAndTime)
                     updatedNote.id = noteID
                     viewModel.updateNote(updatedNote)
                     Toast.makeText(
                         activity,
-                        getString(R.string.note_updated) + " ${updatedNote.noteTitle} , ${updatedNote.noteDescription}",
+                        getString(R.string.note_updated) + " ${updatedNote.noteTitle} , ${updatedNote.noteDescription}, ${updatedNote.noteType}",
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -81,8 +100,19 @@ class AddEditFragment : Fragment() {
                 if (noteTitle.isNotEmpty() && noteDescription.isNotEmpty()) {
                     val sdf = SimpleDateFormat(getString(R.string.date_format))
                     val currentDateAndTime: String = sdf.format(Date())
-                    viewModel.addNote(Note(noteTitle, noteDescription, currentDateAndTime))
-                    Toast.makeText(activity, "$noteTitle " + getString(R.string.added), Toast.LENGTH_LONG).show()
+                    viewModel.addNote(
+                        Note(
+                            noteTitle,
+                            noteType,
+                            noteDescription,
+                            currentDateAndTime
+                        )
+                    )
+                    Toast.makeText(
+                        activity,
+                        "$noteTitle , $noteType " + getString(R.string.added),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
             startActivity(Intent(context, MainActivity::class.java))

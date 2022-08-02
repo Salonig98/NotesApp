@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_family"
+        android:title="@string/action_family"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_office"
+        android:title="@string/action_office"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_household"
+        android:title="@string/action_household"
+        app:showAsAction="never"/>
+</menu>

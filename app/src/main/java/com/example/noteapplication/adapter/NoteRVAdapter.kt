@@ -19,11 +19,12 @@ class NoteRVAdapter(
 ) : RecyclerView.Adapter<NoteRVAdapter.ViewHolder>() {
 
     private var allNotes = ArrayList<Note>()
-    val lastUpdated : String = "Last Updated : "
+    private val lastUpdated: String = "Last Updated : "
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val noteTV: TextView = itemView.findViewById<TextView>(R.id.id_tv_note_title)
         val dateTV: TextView = itemView.findViewById<TextView>(R.id.id_tv_timestamp)
+        val noteTypeTV: TextView = itemView.findViewById<TextView>(R.id.tv_note_type)
         val deleteIV: ImageView = itemView.findViewById<ImageView>(R.id.id_tv_delete)
         val shareIV: ImageView = itemView.findViewById<ImageView>(R.id.id_tv_share)
     }
@@ -52,6 +53,7 @@ class NoteRVAdapter(
         val note = allNotes.get(position)
         holder.noteTV.text = note.noteTitle
         holder.dateTV.text = lastUpdated + note.timestamp
+        holder.noteTypeTV.text = note.noteType
         holder.deleteIV.setOnClickListener {
             noteClickDeleteInterface.onDeleteIconClick(allNotes[position])
         }
@@ -74,9 +76,45 @@ class NoteRVAdapter(
     }
 
     fun setData(noteList: ArrayList<Note>) {
+        allNotes.clear()
         this.allNotes = noteList
         notifyDataSetChanged()
     }
+
+    fun showOfficeNotes(noteType: String) {
+        var tempList = allNotes
+        var noteList = ArrayList<Note>()
+        for (note in allNotes) {
+
+        }
+
+    }
+//        println("Inside showOffice")
+//        var noteList = ArrayList<Note>()
+//        this.allNotes.forEach { note ->
+//            if (noteType == "Office") {
+//                noteList.add(note)
+//            } else if (noteType == "Family") {
+//                noteList.add(note)
+//            } else if (noteType == "Household") {
+//                noteList.add(note)
+//            }
+//        }
+//        if(noteList != null) {
+//            println("Inside the null check")
+//            this.allNotes = noteList
+//            for(note in noteList){
+//                println("this alos  , ${note.timestamp}, ${note.noteTitle}, ${note.noteType}")
+//            }
+//        } else{
+//            Log.v("Adapter","the list is null")
+//        }
+//
+//        for(note in noteList){
+//            note.noteType?.let { Log.d("adapter", it) }
+//        }
+//
+//    }
 
 
 }

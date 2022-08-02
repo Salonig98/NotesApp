@@ -10,20 +10,23 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "notesTable")
 class Note(
     @ColumnInfo(name = "title") val noteTitle: String?,
+    @ColumnInfo(name = "type") val noteType: String?,
     @ColumnInfo(name = "description") val noteDescription: String?,
     @ColumnInfo(name = "timestamp") val timestamp: String?,
-    @ColumnInfo (name = "id") @PrimaryKey(autoGenerate = true) var id: Int = 0
+    @ColumnInfo(name = "id") @PrimaryKey(autoGenerate = true) var id: Int = 0
+
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
+        parcel.readString(),
         parcel.readInt()
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(noteTitle)
+        parcel.writeString(noteType)
         parcel.writeString(noteDescription)
         parcel.writeString(timestamp)
         parcel.writeInt(id)
@@ -45,3 +48,4 @@ class Note(
 
 
 }
+

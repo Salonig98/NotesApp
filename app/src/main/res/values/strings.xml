@@ -18,5 +18,11 @@
     <string name="note_updated">Note Updated</string>
     <string name="added">Added</string>
     <string name="deleted">Deleted</string>
+    <string name="action_office">Office</string>
+    <string name="action_family">Family</string>
+    <string name="action_household">Household</string>
+    <string name="notes_app">Notes App</string>
+    <string name="save_all_notes">Save All Important Notes</string>
+
 
 </resources>
