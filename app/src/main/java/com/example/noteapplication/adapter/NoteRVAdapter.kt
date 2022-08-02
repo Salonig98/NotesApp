@@ -80,41 +80,4 @@ class NoteRVAdapter(
         this.allNotes = noteList
         notifyDataSetChanged()
     }
-
-    fun showOfficeNotes(noteType: String) {
-        var tempList = allNotes
-        var noteList = ArrayList<Note>()
-        for (note in allNotes) {
-
-        }
-
-    }
-//        println("Inside showOffice")
-//        var noteList = ArrayList<Note>()
-//        this.allNotes.forEach { note ->
-//            if (noteType == "Office") {
-//                noteList.add(note)
-//            } else if (noteType == "Family") {
-//                noteList.add(note)
-//            } else if (noteType == "Household") {
-//                noteList.add(note)
-//            }
-//        }
-//        if(noteList != null) {
-//            println("Inside the null check")
-//            this.allNotes = noteList
-//            for(note in noteList){
-//                println("this alos  , ${note.timestamp}, ${note.noteTitle}, ${note.noteType}")
-//            }
-//        } else{
-//            Log.v("Adapter","the list is null")
-//        }
-//
-//        for(note in noteList){
-//            note.noteType?.let { Log.d("adapter", it) }
-//        }
-//
-//    }
-
-
 }

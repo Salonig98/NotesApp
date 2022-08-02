@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
 
         actionBar!!.title = getString(R.string.notes_app)
         actionBar.subtitle = getString(R.string.save_all_notes)
-        actionBar.setIcon(R.drawable.ic_notes_logo)
+        actionBar.setIcon(R.drawable.ic_note_logo)
 
         actionBar.setDisplayUseLogoEnabled(true)
         actionBar.setDisplayShowHomeEnabled(true)
@@ -130,11 +130,10 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
         val intent = Intent(this@MainActivity, AddEditNoteActivity::class.java)
         intent.putExtra(getString(com.example.noteapplication.R.string.note_object), note)
         intent.putExtra(
-            getString(com.example.noteapplication.R.string.note_type),
-            getString(com.example.noteapplication.R.string.edit)
+            getString(R.string.note_type),
+            getString(R.string.edit)
         )
         startActivity(intent)
-        this.finish()
     }
 
     override fun onDeleteIconClick(note: Note) {
@@ -145,6 +144,10 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
             Toast.LENGTH_LONG
         )
             .show()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 
     override fun onShareIconClick(note: Note) {

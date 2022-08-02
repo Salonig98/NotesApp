@@ -1,5 +1,6 @@
 package com.example.noteapplication.ui
 
+
 import android.app.Application
 import android.content.Intent
 import android.os.Bundle
@@ -48,22 +49,28 @@ class AddEditFragment : Fragment() {
             this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(Application())
         ).get(NoteViewModel::class.java)
-
         val noteType = bundle?.getStringExtra(getString(R.string.note_type))
         if (noteType.equals(getString(R.string.edit))) {
 
             val note = bundle?.getParcelableExtra<Note>(getString(R.string.note_object))
             val noteTitle = note?.noteTitle
             val noteDescription = note?.noteDescription
+            val noteTypeText = note?.noteType
             noteID = note?.id!!
             binding.idBtn.text = getString(R.string.update)
             binding.idEditNoteName.setText(noteTitle)
             binding.idEditNoteDescription.setText(noteDescription)
-            selectedRadioButtonId = binding.radioGroup.checkedRadioButtonId
-            if (selectedRadioButtonId != -1) {
-                selectedRadioButton = binding.radioGroup.findViewById(selectedRadioButtonId)
-                val selectedRbText: String = selectedRadioButton?.text.toString()
 
+            val radiobuttonFamily = binding.family
+            val radiobuttonOffice = binding.office
+            val radiobuttonHousehold = binding.household
+
+            if (noteTypeText.equals(getString(R.string.action_family), ignoreCase = true)) {
+                radiobuttonFamily.isChecked = true
+            } else if (noteTypeText.equals(getString(R.string.action_office), ignoreCase = true)) {
+                radiobuttonOffice.isChecked = true
+            } else {
+                radiobuttonHousehold.isChecked = true
             }
         } else {
             binding.idBtn.text = getString(R.string.save)
@@ -80,14 +87,14 @@ class AddEditFragment : Fragment() {
 
             val noteTitle = binding.idEditNoteName.text.toString()
             val noteDescription = binding.idEditNoteDescription.text.toString()
-            val noteType = type
-
+            val noteFilterType = type
 
             if (noteType.equals(getString(R.string.edit))) {
                 if (noteTitle.isNotEmpty() && noteDescription.isNotEmpty()) {
-                    val sdf = SimpleDateFormat(getString(R.string.date_format))
-                    val currentDateAndTime: String = sdf.format(Date())
-                    val updatedNote = Note(noteTitle, noteType, noteDescription, currentDateAndTime)
+                    val dateFormat = SimpleDateFormat(getString(R.string.date_format))
+                    val currentDateAndTime: String = dateFormat.format(Date())
+                    val updatedNote =
+                        Note(noteTitle, noteFilterType, noteDescription, currentDateAndTime)
                     updatedNote.id = noteID
                     viewModel.updateNote(updatedNote)
                     Toast.makeText(
@@ -97,23 +104,26 @@ class AddEditFragment : Fragment() {
                     ).show()
                 }
             } else {
-                if (noteTitle.isNotEmpty() && noteDescription.isNotEmpty()) {
-                    val sdf = SimpleDateFormat(getString(R.string.date_format))
-                    val currentDateAndTime: String = sdf.format(Date())
-                    viewModel.addNote(
-                        Note(
-                            noteTitle,
-                            noteType,
-                            noteDescription,
-                            currentDateAndTime
+                if (noteFilterType != null) {
+                    if (noteTitle.isNotEmpty() && noteDescription.isNotEmpty() && noteFilterType.isNotEmpty()) {
+                        val simpleDateFormat = SimpleDateFormat(getString(R.string.date_format))
+                        val currentDateAndTime: String = simpleDateFormat.format(Date())
+                        viewModel.addNote(
+                            Note(
+                                noteTitle,
+                                noteFilterType,
+                                noteDescription,
+                                currentDateAndTime
+                            )
                         )
-                    )
-                    Toast.makeText(
-                        activity,
-                        "$noteTitle , $noteType " + getString(R.string.added),
-                        Toast.LENGTH_LONG
-                    ).show()
+                        Toast.makeText(
+                            activity,
+                            "$noteTitle , $noteType " + getString(R.string.added),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
+
             }
             startActivity(Intent(context, MainActivity::class.java))
         }
