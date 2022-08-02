@@ -33,7 +33,7 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
         repository.update(note)
     }
 
-    fun search(data: String): LiveData<List<Note>>? {
+    fun searchNote(data: String): LiveData<List<Note>>? {
         return repository.search(data)
     }
 }

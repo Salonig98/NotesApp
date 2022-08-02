@@ -26,13 +26,12 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
     NoteRVAdapter.NoteClickDeleteInterface, NoteRVAdapter.NoteClickShareInterface,
     SearchView.OnQueryTextListener {
     private lateinit var binding: com.example.noteapplication.databinding.ActivityMainBinding
-    lateinit var noteViewModel: NoteViewModel
+    private lateinit var noteViewModel: NoteViewModel
     private lateinit var noteAdapter: NoteRVAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val actionBar = supportActionBar
-
 
         actionBar!!.title = getString(R.string.notes_app)
         actionBar.subtitle = getString(R.string.save_all_notes)
@@ -41,7 +40,7 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
         actionBar.setDisplayUseLogoEnabled(true)
         actionBar.setDisplayShowHomeEnabled(true)
         binding =
-            DataBindingUtil.setContentView(this, com.example.noteapplication.R.layout.activity_main)
+            DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.idRvNotes.layoutManager = LinearLayoutManager(this)
 
         noteAdapter = NoteRVAdapter(this, this, this, this)
@@ -101,13 +100,13 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
 
             when (item!!.itemId) {
                 R.id.action_office -> {
-                    getNotesFromDB(FilterType.Office.toString())
+                    searchNotesFromDB(FilterType.Office.toString())
                 }
                 R.id.action_family -> {
-                    getNotesFromDB(FilterType.Family.toString())
+                    searchNotesFromDB(FilterType.Family.toString())
                 }
                 R.id.action_household -> {
-                    getNotesFromDB(FilterType.Household.toString())
+                    searchNotesFromDB(FilterType.Household.toString())
                 }
             }
 
@@ -117,11 +116,11 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
         popup.show()
     }
 
-    private fun getNotesFromDB(data: String) {
+    private fun searchNotesFromDB(data: String) {
         var searchText = data
-        Log.d("MainActivity", "Inside getNotesFromDB")
+        Log.d("MainActivity", "Inside searchNotesFromDB")
         searchText = "%$data%"
-        noteViewModel.search(searchText)?.observe(this, Observer {
+        noteViewModel.searchNote(searchText)?.observe(this, Observer {
             noteAdapter.setData(it as ArrayList<Note>)
         })
     }
@@ -174,13 +173,13 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query != null)
-            getNotesFromDB(query)
+            searchNotesFromDB(query)
         return true
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
         if (newText != null)
-            getNotesFromDB(newText)
+            searchNotesFromDB(newText)
         return true
     }
 }

@@ -20,12 +20,12 @@ import android.widget.RadioButton as RadioButton1
 
 
 class AddEditFragment : Fragment() {
-    lateinit var viewModel: NoteViewModel
-    lateinit var binding: FragmentAddEditBinding
-    var noteID = -1
-    var selectedRadioButton: RadioButton1? = null
-    var selectedRadioButtonId: Int = -1
-    var type: String? = null
+    private lateinit var viewModel: NoteViewModel
+    private lateinit var binding: FragmentAddEditBinding
+    private var noteID = -1
+    private var selectedRadioButton: RadioButton1? = null
+    private var selectedRadioButtonId: Int = -1
+    private var type: String? = null
 
     companion object {
         fun newInstance(): AddEditFragment {
@@ -61,9 +61,9 @@ class AddEditFragment : Fragment() {
             binding.idEditNoteName.setText(noteTitle)
             binding.idEditNoteDescription.setText(noteDescription)
 
-            val radiobuttonFamily = binding.family
-            val radiobuttonOffice = binding.office
-            val radiobuttonHousehold = binding.household
+            val radiobuttonFamily = binding.idRbFamily
+            val radiobuttonOffice = binding.idRbOffice
+            val radiobuttonHousehold = binding.idRbHousehold
 
             if (noteTypeText.equals(getString(R.string.action_family), ignoreCase = true)) {
                 radiobuttonFamily.isChecked = true
@@ -78,9 +78,9 @@ class AddEditFragment : Fragment() {
 
         binding.idBtn.setOnClickListener {
 
-            selectedRadioButtonId = binding.radioGroup.checkedRadioButtonId
+            selectedRadioButtonId = binding.idRadioGroup.checkedRadioButtonId
             if (selectedRadioButtonId != -1) {
-                selectedRadioButton = binding.radioGroup.findViewById(selectedRadioButtonId)
+                selectedRadioButton = binding.idRadioGroup.findViewById(selectedRadioButtonId)
                 val selectedRbText: String = selectedRadioButton?.text.toString()
                 type = selectedRbText
             }

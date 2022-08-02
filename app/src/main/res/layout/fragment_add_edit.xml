@@ -15,7 +15,7 @@
 
 
             <RadioGroup
-                android:id="@+id/radio_group"
+                android:id="@+id/id_radio_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -24,21 +24,21 @@
                 android:padding="1dp">
 
                 <RadioButton
-                    android:id="@+id/office"
+                    android:id="@+id/id_rb_office"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Office"
                     />
 
                 <RadioButton
-                    android:id="@+id/family"
+                    android:id="@+id/id_rb_family"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Family"
                     />
 
                 <RadioButton
-                    android:id="@+id/household"
+                    android:id="@+id/id_rb_household"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Household"
@@ -51,7 +51,7 @@
                 android:id="@+id/id_edit_note_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/radio_group"
+                android:layout_below="@id/id_radio_group"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
