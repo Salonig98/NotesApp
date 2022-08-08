@@ -7,10 +7,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.noteapplication.R
+import com.example.noteapplication.Utils.Companion.toast
 import com.example.noteapplication.databinding.FragmentAddEditBinding
 import com.example.noteapplication.model.Note
 import com.example.noteapplication.viewModel.NoteViewModel
@@ -35,98 +35,109 @@ class AddEditFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         binding =
             FragmentAddEditBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         val bundle = requireActivity().intent
         viewModel = ViewModelProvider(
             this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(Application())
         ).get(NoteViewModel::class.java)
+
         val noteType = bundle?.getStringExtra(getString(R.string.note_type))
+
         if (noteType.equals(getString(R.string.edit))) {
-
-            val note = bundle?.getParcelableExtra<Note>(getString(R.string.note_object))
-            val noteTitle = note?.noteTitle
-            val noteDescription = note?.noteDescription
-            val noteTypeText = note?.noteType
-            noteID = note?.id!!
-            binding.idBtn.text = getString(R.string.update)
-            binding.idEditNoteName.setText(noteTitle)
-            binding.idEditNoteDescription.setText(noteDescription)
-
-            val radiobuttonFamily = binding.idRbFamily
-            val radiobuttonOffice = binding.idRbOffice
-            val radiobuttonHousehold = binding.idRbHousehold
-
-            if (noteTypeText.equals(getString(R.string.action_family), ignoreCase = true)) {
-                radiobuttonFamily.isChecked = true
-            } else if (noteTypeText.equals(getString(R.string.action_office), ignoreCase = true)) {
-                radiobuttonOffice.isChecked = true
-            } else {
-                radiobuttonHousehold.isChecked = true
-            }
+            passDataFromEditNoteToList(noteType, bundle)
         } else {
             binding.idBtn.text = getString(R.string.save)
         }
 
         binding.idBtn.setOnClickListener {
-
-            selectedRadioButtonId = binding.idRadioGroup.checkedRadioButtonId
-            if (selectedRadioButtonId != -1) {
-                selectedRadioButton = binding.idRadioGroup.findViewById(selectedRadioButtonId)
-                val selectedRbText: String = selectedRadioButton?.text.toString()
-                type = selectedRbText
-            }
-
-            val noteTitle = binding.idEditNoteName.text.toString()
-            val noteDescription = binding.idEditNoteDescription.text.toString()
-            val noteFilterType = type
-
-            if (noteType.equals(getString(R.string.edit))) {
-                if (noteTitle.isNotEmpty() && noteDescription.isNotEmpty()) {
-                    val dateFormat = SimpleDateFormat(getString(R.string.date_format))
-                    val currentDateAndTime: String = dateFormat.format(Date())
-                    val updatedNote =
-                        Note(noteTitle, noteFilterType, noteDescription, currentDateAndTime)
-                    updatedNote.id = noteID
-                    viewModel.updateNote(updatedNote)
-                    Toast.makeText(
-                        activity,
-                        getString(R.string.note_updated) + " ${updatedNote.noteTitle} , ${updatedNote.noteDescription}, ${updatedNote.noteType}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            } else {
-                if (noteFilterType != null) {
-                    if (noteTitle.isNotEmpty() && noteDescription.isNotEmpty() && noteFilterType.isNotEmpty()) {
-                        val simpleDateFormat = SimpleDateFormat(getString(R.string.date_format))
-                        val currentDateAndTime: String = simpleDateFormat.format(Date())
-                        viewModel.addNote(
-                            Note(
-                                noteTitle,
-                                noteFilterType,
-                                noteDescription,
-                                currentDateAndTime
-                            )
-                        )
-                        Toast.makeText(
-                            activity,
-                            "$noteTitle , $noteType " + getString(R.string.added),
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                }
-
-            }
-            startActivity(Intent(context, MainActivity::class.java))
+            onClickAddUpdateButton(noteType)
         }
+        return binding.root
+    }
+
+    private fun passDataFromEditNoteToList(noteType: String?, bundle: Intent) {
+
+        val note = bundle?.getParcelableExtra<Note>(getString(R.string.note_object))
+        val noteTitle = note?.noteTitle
+        val noteDescription = note?.noteDescription
+        val noteTypeText = note?.noteType
+        noteID = note?.id!!
+        binding.idBtn.text = getString(R.string.update)
+        binding.idEditNoteName.setText(noteTitle)
+        binding.idEditNoteDescription.setText(noteDescription)
+
+        if (noteTypeText.equals(getString(R.string.action_family), ignoreCase = true)) {
+            binding.idRbFamily.isChecked = true
+        } else if (noteTypeText.equals(getString(R.string.action_office), ignoreCase = true)) {
+            binding.idRbOffice.isChecked = true
+        } else {
+            binding.idRbHousehold.isChecked = true
+        }
+
+    }
+
+    private fun onClickAddUpdateButton(noteType: String?) {
+        selectedRadioButtonId = binding.idRadioGroup.checkedRadioButtonId
+        if (selectedRadioButtonId != -1) {
+            selectedRadioButton = binding.idRadioGroup.findViewById(selectedRadioButtonId)
+            val selectedRbText: String = selectedRadioButton?.text.toString()
+            type = selectedRbText
+        }
+
+        if (noteType.equals(getString(R.string.edit)))
+            editNote(
+                binding.idEditNoteName.text.toString(),
+                type,
+                binding.idEditNoteDescription.text.toString()
+            ) else {
+            addNote(
+                type,
+                binding.idEditNoteName.text.toString(),
+                binding.idEditNoteDescription.text.toString(),
+            )
+        }
+        startActivity(Intent(context, MainActivity::class.java))
+    }
+
+    private fun editNote(noteTitle: String, noteFilterType: String?, noteDescription: String) {
+        if (binding.idEditNoteName.text.toString()
+                .isNotEmpty() && binding.idEditNoteDescription.text.toString().isNotEmpty()
+        ) {
+            val dateFormat = SimpleDateFormat(getString(R.string.date_format))
+            val currentDateAndTime: String = dateFormat.format(Date())
+            val updatedNote =
+                Note(noteTitle, noteFilterType, noteDescription, currentDateAndTime)
+            updatedNote.id = noteID
+            viewModel.updateNote(updatedNote)
+            context?.toast(getString(R.string.note_updated) + " ${updatedNote.noteTitle} , ${updatedNote.noteDescription}, ${updatedNote.noteType}")
+        }
+    }
+
+    private fun addNote(
+        noteFilterType: String?,
+        noteTitle: String,
+        noteDescription: String,
+    ) {
+        if (noteFilterType != null) {
+            if (noteTitle.isNotEmpty() && noteDescription.isNotEmpty() && noteFilterType.isNotEmpty()) {
+                val simpleDateFormat = SimpleDateFormat(getString(R.string.date_format))
+                val currentDateAndTime: String = simpleDateFormat.format(Date())
+                viewModel.addNote(
+                    Note(
+                        noteTitle,
+                        noteFilterType,
+                        noteDescription,
+                        currentDateAndTime
+                    )
+                )
+                context?.toast("$noteTitle " + getString(R.string.added))
+            }
+        }
+
     }
 
 

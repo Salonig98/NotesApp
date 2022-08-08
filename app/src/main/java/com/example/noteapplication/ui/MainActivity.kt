@@ -16,6 +16,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.noteapplication.R
+import com.example.noteapplication.Utils
+import com.example.noteapplication.Utils.Companion.toast
 import com.example.noteapplication.adapter.NoteRVAdapter
 import com.example.noteapplication.model.FilterType
 import com.example.noteapplication.model.Note
@@ -31,14 +33,22 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val actionBar = supportActionBar
+        initActionBar()
+        initUi()
+    }
 
+    private fun initActionBar() {
+        val actionBar = supportActionBar
         actionBar!!.title = getString(R.string.notes_app)
         actionBar.subtitle = getString(R.string.save_all_notes)
         actionBar.setIcon(R.drawable.ic_note_logo)
 
         actionBar.setDisplayUseLogoEnabled(true)
         actionBar.setDisplayShowHomeEnabled(true)
+    }
+
+    private fun initUi() {
+
         binding =
             DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.idRvNotes.layoutManager = LinearLayoutManager(this)
@@ -63,10 +73,8 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
         }
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
-
         val search = menu.findItem(R.id.menu_search)
         val searchView = search?.actionView as? SearchView
         searchView?.isSubmitButtonEnabled = true
@@ -78,11 +86,7 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_refresh -> {
-                noteViewModel.allNotes.observe(this, Observer { list ->
-                    list?.let {
-                        noteAdapter.updateList(it)
-                    }
-                })
+                noteViewModel.refresh()
             }
             R.id.menu_filter -> {
                 val menuItemView = findViewById<View>(R.id.menu_filter)
@@ -118,7 +122,7 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
 
     private fun searchNotesFromDB(data: String) {
         var searchText = data
-        Log.d("MainActivity", "Inside searchNotesFromDB")
+        //Log.d("MainActivity", "Inside searchNotesFromDB")
         searchText = "%$data%"
         noteViewModel.searchNote(searchText)?.observe(this, Observer {
             noteAdapter.setData(it as ArrayList<Note>)
@@ -137,12 +141,7 @@ class MainActivity : AppCompatActivity(), NoteRVAdapter.NoteClickInterface,
 
     override fun onDeleteIconClick(note: Note) {
         noteViewModel.deleteNote(note)
-        Toast.makeText(
-            this,
-            "${note.noteTitle} " + getString(com.example.noteapplication.R.string.deleted),
-            Toast.LENGTH_LONG
-        )
-            .show()
+        toast("${note.noteTitle} " + getString(com.example.noteapplication.R.string.deleted))
     }
 
     override fun onBackPressed() {

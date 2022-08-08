@@ -50,7 +50,7 @@ class NoteRVAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val note = allNotes.get(position)
+        val note = allNotes[position]
         holder.noteTV.text = note.noteTitle
         holder.dateTV.text = lastUpdated + note.timestamp
         holder.noteTypeTV.text = note.noteType

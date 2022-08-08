@@ -36,5 +36,9 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
     fun searchNote(data: String): LiveData<List<Note>>? {
         return repository.search(data)
     }
+
+    fun refresh(): LiveData<List<Note>>? {
+        return this.allNotes
+    }
 }
 
